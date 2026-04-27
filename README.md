@@ -1,2 +1,2 @@
 # projeto_devops
-atividade DevOps
+atividade DevOp
