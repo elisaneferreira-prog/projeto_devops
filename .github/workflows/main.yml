@@ -1,34 +1,44 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
-      - teste-final
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar repositório
-        uses: actions/checkout@v3
+      - name: Baixar o código
+        uses: actions/checkout@v4
 
       - name: Configurar Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
-      - name: Rodar código
-        run: python main.py
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Executar testes unitários
+        run: pytest
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: echo "Build executado com sucesso"
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - name: Deploy (simulado)
-        run: echo "Deploy feito com sucesso 🚀"
+      - name: Deploy
+        run: echo "Deploy executado com sucesso"
